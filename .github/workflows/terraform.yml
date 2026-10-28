@@ -14,27 +14,21 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-
       - name: Terraform Format (fmt)
         run: terraform fmt -check -recursive
         working-directory: ./environments/dev
-
       - name: Setup TFLint (Lint/Calidad)
         uses: terraform-linters/setup-tflint@v4
         with:
           tflint_version: latest
-
       - name: Init TFLint
         run: tflint --init
         working-directory: ./environments/dev
-
       - name: Run TFLint
         run: tflint
         working-directory: ./environments/dev
-
       - name: Terraform Init
         run: terraform init
         working-directory: ./environments/dev
@@ -42,11 +36,9 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-
       - name: Terraform Validate
         run: terraform validate
         working-directory: ./environments/dev
-
       - name: Prueba IaC (Aserciones)
         run: |
           terraform plan -out=tfplan
@@ -57,7 +49,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-
       - name: Security Scan (Checkov)
         uses: bridgecrewio/checkov-action@master
         with:
