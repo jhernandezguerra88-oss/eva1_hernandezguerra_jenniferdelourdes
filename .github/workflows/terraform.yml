@@ -7,7 +7,6 @@ on:
     branches: [ Principal ]
 
 jobs:
-  # ETAPA 1: Controles de Calidad y Seguridad (CI)
   terraform-ci:
     name: 'Validación y Seguridad'
     runs-on: ubuntu-latest
@@ -36,7 +35,6 @@ jobs:
           framework: terraform
           soft_fail: true
 
-  # ETAPA 2: Plan (Previsualización) - Solo en Pull Requests
   terraform-plan:
     name: 'Terraform Plan'
     needs: terraform-ci
@@ -62,13 +60,12 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
 
-  # ETAPA 3: Apply (Despliegue con GATE) - Depende del CI, no del Plan
   terraform-apply:
     name: 'Terraform Apply'
     needs: terraform-ci 
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/Principal' && github.event_name == 'push'
-    environment: production # <--- AQUÍ SE ACTIVA EL GATE
+    environment: production
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -88,4 +85,3 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-          
