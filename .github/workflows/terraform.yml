@@ -14,14 +14,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-
       - name: Terraform Format (fmt)
         run: terraform fmt -check -recursive
         working-directory: ./environments/dev
-
       - name: Terraform Init
         run: terraform init
         working-directory: ./environments/dev
@@ -29,11 +26,9 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
-
       - name: Terraform Validate
         run: terraform validate
         working-directory: ./environments/dev
-
       - name: Security Scan (Checkov)
         uses: bridgecrewio/checkov-action@master
         with:
@@ -41,7 +36,7 @@ jobs:
           framework: terraform
           soft_fail: true
 
-  # ETAPA 2: Plan (Previsualización)
+  # ETAPA 2: Plan (Previsualización) - Solo en Pull Requests
   terraform-plan:
     name: 'Terraform Plan'
     needs: terraform-ci
@@ -67,13 +62,13 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
 
-  # ETAPA 3: Apply (Despliegue con GATE de aprobación)
+  # ETAPA 3: Apply (Despliegue con GATE) - Depende del CI, no del Plan
   terraform-apply:
     name: 'Terraform Apply'
-    needs: terraform-plan
+    needs: terraform-ci 
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/Principal' && github.event_name == 'push'
-    environment: production # <--- ESTO ACTIVA LA APROBACIÓN MANUAL
+    environment: production # <--- AQUÍ SE ACTIVA EL GATE
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
