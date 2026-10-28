@@ -1,6 +1,7 @@
 name: 'Terraform CI/CD Pipeline'
 
 on:
+ workflow_dispatch:
   push:
     branches: [ Principal ]
   pull_request:
@@ -46,7 +47,7 @@ jobs:
     name: 'Terraform Plan'
     needs: terraform-ci
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
