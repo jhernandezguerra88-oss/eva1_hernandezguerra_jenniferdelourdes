@@ -1,6 +1,6 @@
 locals {
   portal_user_data = templatefile(
-    "${path.module}/templates/user_data_v1.sh.tpl", # <-- Ruta corregida
+    "${path.module}/../../templates/user_data_v1.sh.tpl",
     {
       student_name   = var.student_name
       student_number = tostring(var.student_number)
@@ -10,6 +10,7 @@ locals {
     }
   )
 }
+
 
 
 module "network" {

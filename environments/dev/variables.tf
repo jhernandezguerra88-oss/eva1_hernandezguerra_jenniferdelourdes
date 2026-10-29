@@ -21,12 +21,11 @@ variable "subnet_cidr" {
   type        = string
   default     = "10.0.1.0/24"
 }
-variable "student_name" {
-  description = "Nombre del estudiante"
-  type        = string
+
+variable "student_name" { # <-- Esta línea debe empezar abajo, con su salto de línea
+  type = string
 }
 
-variable "student_number" {
-  description = "Numero de lista del estudiante"
-  type        = number
+variable "student_number" { # <-- Y esta también debe tener su propio salto
+  type = number
 }
