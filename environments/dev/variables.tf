@@ -20,4 +20,12 @@ variable "subnet_cidr" {
   description = "CIDR de la Subnet"
   type        = string
   default     = "10.0.1.0/24"
+}variable "student_name" {
+  description = "Nombre del estudiante"
+  type        = string
+}
+
+variable "student_number" {
+  description = "Numero de lista del estudiante"
+  type        = number
 }

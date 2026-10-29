@@ -14,14 +14,13 @@ resource "aws_instance" "web" {
   subnet_id              = var.subnet_id
   vpc_security_group_ids = [var.security_group_id]
 
-  user_data = <<-EOF
-              #!/bin/bash
-              yum update -y
-              yum install -y httpd
-              systemctl start httpd
-              systemctl enable httpd
-              echo "<h1>Portal Operacional NexoAndes - Fase 1</h1>" > /var/www/html/index.html
-              EOF
+  user_data                   = var.portal_user_data
+  user_data_replace_on_change = true
+
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
 
   tags = {
     Name = "${var.project_name}-web-server"
