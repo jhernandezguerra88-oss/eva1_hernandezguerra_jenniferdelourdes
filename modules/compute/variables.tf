@@ -9,3 +9,6 @@ variable "subnet_id" {
 variable "security_group_id" {
   type = string
 }
+variable "portal_user_data" {
+  type = string
+}
